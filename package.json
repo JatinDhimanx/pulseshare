@@ -1,0 +1,21 @@
+{
+  "name": "zero-db-p2p-share",
+  "version": "1.0.0",
+  "description": "Browser memory-based Peer-to-Peer file & note sharing web app with Zero Database",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "tunnel": "npx -y localtunnel --port 3000"
+  },
+  "keywords": [
+    "p2p",
+    "webrtc",
+    "file-sharing",
+    "peerjs",
+    "zero-database",
+    "browser-memory"
+  ],
+  "author": "",
+  "license": "MIT"
+}

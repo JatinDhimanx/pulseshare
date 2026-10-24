@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>PulseShare | Zero-Database Direct Browser File Sharing</title>
+  <meta name="description" content="Share files and secret notes directly between browsers using WebRTC. Zero database, zero server storage, pure RAM peer-to-peer streaming.">
+
+  <!-- Fonts: Sora, Inter, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600;700&family=Sora:wght@500;600;700;800&display=swap">
+
+  <!-- Master Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Core Libraries (Offline Fast Local + CDN Fallback) -->
+  <script src="js/peerjs.min.js"></script>
+  <script src="js/qrcode.min.js"></script>
+  <script src="js/confetti.min.js"></script>
+  <script src="js/html5-qrcode.min.js"></script>
+  <script>
+    if (!window.Peer) document.write('<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"><\/script>');
+    if (!window.QRCode) document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"><\/script>');
+    if (!window.confetti) document.write('<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"><\/script>');
+    if (!window.Html5Qrcode) document.write('<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"><\/script>');
+  </script>
+</head>
+<body>
+
+
+  <!-- Sticky Header -->
+  <header class="hdr">
+    <div class="wrap">
+      <a class="brand" href="#home" data-go="home" aria-label="PulseShare home">
+        <svg class="logo" viewBox="0 0 34 34" aria-hidden="true">
+          <defs>
+            <linearGradient id="lg" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#FF8A4C"/>
+              <stop offset="1" stop-color="#FF6A1F"/>
+            </linearGradient>
+          </defs>
+          <rect width="34" height="34" rx="10" fill="url(#lg)"/>
+          <path d="M19.5 6.5 9.5 19h6.2l-1.4 8.5L24.5 15h-6.3z" fill="#1B0F08"/>
+        </svg>
+        <span class="wm">Pulse<b>Share</b></span>
+      </a>
+
+      <button class="menu-btn" id="menuBtn" type="button" data-act="menu" aria-expanded="false" aria-controls="nav" aria-label="Open menu">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 7h16M4 12h16M4 17h16"></path>
+        </svg>
+      </button>
+
+      <nav class="nav" id="nav" aria-label="Main">
+        <a class="lnk" href="#home" data-go="home" data-nav="home">Home</a>
+        <a class="lnk" href="#send" data-go="send" data-nav="send">Send</a>
+        <a class="lnk" href="#receive" data-go="receive" data-nav="receive">Receive</a>
+        <button type="button" class="lnk nav-scan-btn" data-act="open-scanner" style="background:transparent;border:0;display:inline-flex;align-items:center;gap:6px;cursor:pointer;">
+          <svg class="ic" style="width:16px;height:16px;color:var(--orange);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+            <circle cx="12" cy="13" r="4"/>
+          </svg>
+          <span>Scan QR</span>
+        </button>
+        <a class="lnk" href="#how" data-go="how" data-nav="how">How It Works</a>
+        <a class="btn btn-primary btn-sm" id="navCta" href="#send" data-go="send">Get Started</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main View Container -->
+  <main id="main" tabindex="-1" style="outline:none"></main>
+
+  <!-- Footer -->
+  <footer class="foot">
+    <div class="wrap">
+      <div class="foot-grid">
+        <div>
+          <a class="brand" href="#home" data-go="home">
+            <svg class="logo" viewBox="0 0 34 34" aria-hidden="true">
+              <rect width="34" height="34" rx="10" fill="#FF762F"/>
+              <path d="M19.5 6.5 9.5 19h6.2l-1.4 8.5L24.5 15h-6.3z" fill="#1B0F08"/>
+            </svg>
+            <span class="wm">Pulse<b>Share</b></span>
+          </a>
+          <p>Your files. One code. Instantly shared directly between browser memories.</p>
+        </div>
+        <div>
+          <h4>Learn more</h4>
+          <ul>
+            <li><a href="#how" data-go="how">How It Works</a></li>
+            <li><a href="#privacy" data-go="how" data-hash="privacy">Privacy (Zero-DB)</a></li>
+            <li><a href="#terms" data-go="how" data-hash="terms">Terms & Usage</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>About sharing codes</h4>
+          <p style="margin-top:0">
+            A sharing code is temporary. It works for one receiver, and stops working as soon as the transfer completes or the sender closes their tab.
+          </p>
+        </div>
+      </div>
+      <div class="copy">PulseShare. 100% Zero Database · Pure WebRTC Memory Transfer.</div>
+    </div>
+  </footer>
+
+  <!-- Toasts & Modal Container -->
+  <div id="toasts" aria-live="polite" aria-atomic="false"></div>
+  <div id="modal"></div>
+
+  <!-- Hidden File Input for Picker -->
+  <input type="file" id="fileInput" multiple hidden>
+
+  <!-- P2P Engine & App Controller -->
+  <script src="js/peer-transfer.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>
